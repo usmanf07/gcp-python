@@ -1,5 +1,5 @@
 from flask import Flask, request
-import json 
+import json
 app = Flask("internal")
 
 tutorials = {
@@ -9,15 +9,15 @@ tutorials = {
     4: "Tutorial 4",
     5: "Tutorial 5"
 }
-
-@app.route('/tutorials', methods=['GET'])
+#Define the internal path, idiomatic Flask definition
+@app.route('/getTutorials', methods=['GET'])
 def get_tutorials():
 
     response = json.dumps(tutorials)
-    
-    return flask.Response(response, mimetype="application/json")
 
-@app.route('/tutorials/<string:id>', methods=['GET'])
+    return response, 200
+
+@app.route('/getTutorial/<string:id>', methods=['GET'])
 def get_tutorials_id(id):
 
     tutorial = tutorials.get(id)
@@ -26,9 +26,10 @@ def get_tutorials_id(id):
     else:
         response = json.dumps({"error": "Tutorial not found"})
     
-    return flask.Response(response, mimetype="application/json")
+    return response, 200
 
-def my_function(request):
+#Comply with Cloud Functions code structure for entry point
+def tutorialapi(request):
     #Create a new app context for the internal app
     internal_ctx = app.test_request_context(path=request.full_path,
                                             method=request.method)
